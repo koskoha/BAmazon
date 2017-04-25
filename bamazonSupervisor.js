@@ -3,7 +3,7 @@ var mysql = require('mysql');
 var inquirer = require('inquirer');
 var Table = require('cli-table');
 
-// mySQL config variabl
+// mySQL config variable
 var connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
@@ -37,6 +37,7 @@ function askQuestions() {
 //show data from departments table
 //calculating total profit and add column to the output 
 function productsSales() {
+    //table variable for printing database data nicely
     var table = new Table({ head: ["Id", "Department Name", "Overhead Costs", "Product Sales", " Total Profit"] });
 
     connection.query('SELECT department_id, department_name, over_head_cost, total_sales, (total_sales - over_head_cost) as total_profit FROM departments',
