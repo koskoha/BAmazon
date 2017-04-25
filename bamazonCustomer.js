@@ -76,14 +76,16 @@ function checkQuantity(userQuantity, itemId) {
 };
 
 //function update product quantity
-function updateQuantity(id, quantity) {
-    connection.query('UPDATE products SET stock_quantity = ? WHERE item_id = ?', [quantity, id], (err) => {
+//accept product id and quantity
+function updateQuantity(itemId, quantity) {
+    connection.query('UPDATE products SET stock_quantity = ? WHERE item_id = ?', [quantity, itemId], (err) => {
         if (err) throw err
         else console.log('Your order was successfully placed!');
     });
 };
 
 //function update product sales in products table
+//accept product id and total price for purchase
 function updateItemSales(itemId, total) {
     connection.query('UPDATE products SET product_sales = product_sales + ? WHERE item_id = ?', [total, itemId], (err) => {
         if (err) throw err
@@ -92,8 +94,9 @@ function updateItemSales(itemId, total) {
 }
 
 //function update product sales in department table
-function updateDepartmentSales(id, total) {
-    connection.query('UPDATE departments SET total_sales = total_sales + ? WHERE department_id = ?', [total, id], (err) => {
+//accept department id and total price for purchase
+function updateDepartmentSales(depId, total) {
+    connection.query('UPDATE departments SET total_sales = total_sales + ? WHERE department_id = ?', [total, depId], (err) => {
         if (err) throw err
         else console.log('Department total sales updated');
         getAllData();
