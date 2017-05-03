@@ -41,7 +41,7 @@ function showQuestions() {
     inquirer.prompt([{
             type: "input",
             name: "id",
-            message: "Enter an id of item you would like to buy."
+            message: "Enter an id of item you would like to buy.",
         },
         {
             type: "input",
@@ -64,7 +64,7 @@ function checkQuantity(userQuantity, itemId) {
         var depId = row[0].department_id;
         if (productQuantity < userQuantity) {
             console.log('Insufficient quantity!');
-            return;
+            showQuestions();
         } else {
             var total = price * userQuantity;
             console.log('Total for this transaction is: ' + total + "$");

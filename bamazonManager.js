@@ -36,9 +36,9 @@ function askQuestions(params) {
             case 'Add New Product':
                 addNewItem();
                 break;
-            case 'Add New Product':
+            case '** Exit **':
                 connection.end();
-                productsForSale();
+                // productsForSale();
                 break;
         }
     });

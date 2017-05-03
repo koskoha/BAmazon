@@ -21,7 +21,7 @@ function askQuestions() {
         type: 'list',
         name: 'action',
         message: 'Select an action:',
-        choices: ['View Product Sales by Department', 'Create New Department']
+        choices: ['View Product Sales by Department', 'Create New Department', '***Exit***']
     }]).then((answers) => {
         switch (answers.action) {
             case 'View Product Sales by Department':
@@ -29,6 +29,9 @@ function askQuestions() {
                 break;
             case 'Create New Department':
                 newDepartment();
+                break;
+            case '***Exit***':
+                connection.end();
                 break;
         }
     })
@@ -49,5 +52,25 @@ function productsSales() {
                 table.push(elem);
             });
             console.log(table.toString());
+            askQuestions();
         })
+}
+
+//function to add new department
+function newDepartment() {
+    inquirer.prompt([{
+        type: "input",
+        name: "department_name",
+        message: "department name: "
+    }, {
+        type: "input",
+        name: "over_head_cost",
+        message: "Overhead cost: "
+    }]).then((item) => {
+        connection.query("INSERT INTO departments(department_name,over_head_cost, total_sales) VALUES (?,?,0)", [item.department_name, item.over_head_cost],
+            (err) => { if (err) throw err; });
+        console.log('Department was successfully added.');
+        console.log('******************************************************************');
+        askQuestions();
+    })
 }
