@@ -8,7 +8,7 @@ var connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
     user: "root",
-    password: '',
+    password: '1111',
     database: "Bamazon"
 });
 
@@ -118,28 +118,36 @@ function addToInventory() {
 
 //add new product to products table.
 function addNewItem() {
-    inquirer.prompt([{
-        type: "input",
-        name: "name",
-        message: "Name: "
-    }, {
-        type: 'list',
-        name: 'department',
-        message: 'Department: ',
-        choices: ["Electronic", "Office", "Home", "Mobile"]
-    }, {
-        type: "input",
-        name: "price",
-        message: "Price: "
-    }, {
-        type: "input",
-        name: "quantity",
-        message: "Quantity: "
-    }]).then((item) => {
-        connection.query("INSERT INTO products(product_name, department_name, price, stock_quantity) VALUES (?,?,?,?)", [item.name, item.department, item.price, item.quantity],
-            (err) => { if (err) throw err; });
-        console.log('Product was successfully added.');
-        console.log('******************************************************************');
-        askQuestions();
-    })
+    connection.query('SELECT * FROM departments', (err, items) => {
+        if (err) throw err;
+        //saving list of all products to an array
+        var choicesArray = [];
+        items.forEach((item) => {
+            choicesArray.push({ name: item.department_name, value: item.department_id });
+        })
+        inquirer.prompt([{
+            type: "input",
+            name: "name",
+            message: "Name: "
+        }, {
+            type: 'list',
+            name: 'department_id',
+            message: 'Department: ',
+            choices: choicesArray
+        }, {
+            type: "input",
+            name: "price",
+            message: "Price: "
+        }, {
+            type: "input",
+            name: "quantity",
+            message: "Quantity: "
+        }]).then((item) => {
+            connection.query("INSERT INTO products(product_name, department_id, price, stock_quantity,product_sales) VALUES (?,?,?,?,0)", [item.name, item.department_id, item.price, item.quantity],
+                (err) => { if (err) throw err; });
+            console.log('Product was successfully added.');
+            console.log('******************************************************************');
+            askQuestions();
+        });
+    });
 }
